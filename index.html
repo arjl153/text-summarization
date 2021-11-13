@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		#input, #result {
+			width: 30%;	
+		}
+	</style>
+	<title></title>
+	<script type="text/javascript">
+		
+		/*
+		**
+		**
+		** PLEASE COPY THE DYNAMIC URL HERE.
+		**
+		** COPY THE DYNAMIC URL INTO THE VARIABLE "url"
+		**
+		*/
+		
+		var url = "http://38234e30.ngrok.io"
+		
+		
+		/*
+		**	
+		** VARIABLE "url" is above!
+		**
+		*/
+		
+		
+		
+		
+		var input_data = "";
+		xhr = new XMLHttpRequest;
+		function fill_input_data(){
+			document.getElementById("fetching").style.display = "inline";
+			input_data = document.getElementById("input").value;
+			console.log("Hello World!");
+			console.log(input_data);
+			
+			xhr.onreadystatechange = display_summary;
+			
+
+			xhr.open("GET", url + "/index?text=" + input_data, true);
+
+			// xhr.open("GET", "http://127.0.0.1:5000/index?text=" + input_data, true);
+			xhr.send();
+		}
+		function display_summary(){
+			if(this.readyState == 4 && this.status == 200){
+				document.getElementById("fetching").style.display = "none";
+				var result = this.response;
+				console.log(result);
+
+				obj = JSON.parse(result)
+				document.getElementById("result_text").style.display = "block";
+				document.getElementById("result").value = obj.summary;
+			}
+		}			
+	</script>
+</head>
+
+<body>
+	<h1 style="text-align:center">Text Summarizer</h1>
+
+	<div style="text-align:center">
+	<p>Sample text that you can use: <br>
+		<b>1. My cat likes the cookie very much. It is very yummy!</b> <br>
+		<b>2. I dislike the coffee. The flavor is bad. </b> <br>
+	</p>
+	<br>
+	<form method="POST">
+		<p><b>Enter your text here:</b> <br>
+			<input type="text" name="input_data" id = "input"> <br><br>
+			<input type="button" value = "Get Summary" onclick = "fill_input_data()">
+		</p>
+	</form>
+	<br>
+	<p id="fetching" style="display:none">Fetching summary...</p>
+
+	<p id="result_text"><b> The summary for the above text is: </b><br>
+		<input type="text" id="result"></input>
+	</p>
+</div>
+</body>
+</html>
